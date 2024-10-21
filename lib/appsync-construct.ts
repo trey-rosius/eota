@@ -111,7 +111,7 @@ export class AppSync extends Construct {
       runtime: FunctionRuntime.JS_1_0_0,
       dataSource: eotaDs,
       code: Code.fromAsset(
-        "./src/resolvers/option/createConversationPuzzle.js"
+        "./src/resolvers/puzzle/createConversationPuzzle.js"
       ),
     });
 

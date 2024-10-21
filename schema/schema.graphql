@@ -11,7 +11,7 @@ input CreatePuzzleInput {
   puzzleDescription: String!
   chapterId: String!
 }
-input Puzzle {
+type Puzzle {
   id: String!
   puzzleId: String!
   puzzleName: String!
