@@ -105,6 +105,16 @@ export class AppSync extends Construct {
       ),
     });
 
+    api.createResolver("createConversationPuzzle", {
+      typeName: "Mutation",
+      fieldName: "createConversationPuzzle",
+      runtime: FunctionRuntime.JS_1_0_0,
+      dataSource: eotaDs,
+      code: Code.fromAsset(
+        "./src/resolvers/option/createConversationPuzzle.js"
+      ),
+    });
+
     const policyStatement = new PolicyStatement({
       effect: Effect.ALLOW,
       actions: ["appsync:GraphQL"],
