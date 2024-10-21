@@ -6,6 +6,18 @@ input OptionInput {
   optionId: String!
 }
 
+input CreatePuzzleInput {
+  puzzleName: String!
+  puzzleDescription: String!
+  chapterId: String!
+}
+input Puzzle {
+  id: String!
+  puzzleId: String!
+  puzzleName: String!
+  puzzleDescription: String!
+  chapterId: String!
+}
 type ConversationResponse @aws_api_key @aws_iam {
   id: String!
   conversationType: CONVERSATIONTYPE!
@@ -24,6 +36,39 @@ enum CONVERSATIONTYPE {
   GENERATIVE_IMAGE
 }
 
+input CreateOptionInput {
+  relicId: String
+  puzzleId: String
+  conversationId: String!
+  nextConversationId: String!
+  nextStepType: CONVERSATIONTYPE!
+  optionText: String!
+}
+
+type Option {
+  id: String!
+  optionId: String!
+  relicId: String
+  puzzleId: String
+  conversationId: String!
+  nextConversationId: String!
+  nextStepType: CONVERSATIONTYPE!
+  optionText: String!
+}
+
+input CreateConversationInput {
+  message: String!
+  chapterId: String!
+  characterId: String!
+}
+type Conversation {
+  id: String!
+  message: String!
+  conversationId: String!
+  chapterId: String!
+  characterId: String!
+}
+
 input NotifyOptionResponseInput {
   id: String!
   conversationType: CONVERSATIONTYPE!
@@ -36,6 +81,10 @@ input NotifyOptionResponseInput {
 }
 
 type Mutation {
+  createConversationPuzzle(input: CreatePuzzleInput!): Puzzle! @aws_api_key
+  createConversationOption(input: CreateOptionInput!): Option! @aws_api_key
+  createConversation(input: CreateConversationInput!): Conversation!
+    @aws_api_key
   sendOption(input: OptionInput!): Boolean! @aws_api_key
   notifyOptionResponse(
     input: NotifyOptionResponseInput!

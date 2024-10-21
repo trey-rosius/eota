@@ -86,6 +86,24 @@ export class AppSync extends Construct {
       dataSource: noneDs,
       code: Code.fromAsset("./src/resolvers/notifyOptionResponse.js"),
     });
+    api.createResolver("createConversation", {
+      typeName: "Mutation",
+      fieldName: "createConversation",
+      runtime: FunctionRuntime.JS_1_0_0,
+      dataSource: eotaDs,
+      code: Code.fromAsset(
+        "./src/resolvers/conversation/createConversation.js"
+      ),
+    });
+    api.createResolver("createConversationOption", {
+      typeName: "Mutation",
+      fieldName: "createConversationOption",
+      runtime: FunctionRuntime.JS_1_0_0,
+      dataSource: eotaDs,
+      code: Code.fromAsset(
+        "./src/resolvers/option/createConversationOption.js"
+      ),
+    });
 
     const policyStatement = new PolicyStatement({
       effect: Effect.ALLOW,
