@@ -1,0 +1,85 @@
+{
+  "StartAt": "Wait",
+  "States": {
+    "Wait": {
+      "Type": "Wait",
+      "Seconds": 10,
+      "Next": "Get Next Conversation ID"
+    },
+    "Get Next Conversation ID": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::dynamodb:getItem",
+      "Parameters": {
+        "TableName": "eota",
+        "Key": {
+          "PK": {
+            "S.$": "States.Format('OPTION#{}',$.optionId)"
+          },
+          "SK": {
+            "S.$": "States.Format('OPTION#{}',$.optionId)"
+          }
+        }
+      },
+      "Next": "Get Conversation",
+      "ResultSelector": {
+        "conversationId.$": "$.Item.nextConversationId.S"
+      }
+    },
+    "Get Conversation": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::dynamodb:getItem",
+      "Parameters": {
+        "TableName": "eota",
+        "Key": {
+          "PK": {
+            "S.$": "States.Format('CONVERSATION#{}',$.conversationId)"
+          },
+          "SK": {
+            "S.$": "States.Format('CONVERSATION#{}',$.conversationId)"
+          }
+        }
+      },
+      "Next": "Update Order to PAID",
+      "ResultSelector": {
+        "id.$": "$.Item.conversationId.S",
+        "message.$": "$.Item.message.S",
+        "characterId.$": "$.Item.characterId.S",
+        "chapterId.$": "$.Item.chapterId.S"
+      }
+    },
+    "Update Order to PAID": {
+      "Type": "Pass",
+      "ResultPath": "$.option",
+      "Parameters": {
+        "id.$": "$.id",
+        "message.$": "$.message",
+        "characterId.$": "$.characterId",
+        "chapterId.$": "$.chapterId"
+      },
+      "Next": "Notify Paid"
+    },
+    "Notify Paid": {
+      "Next": "Wait for Confirmation",
+      "Type": "Task",
+      "ResultPath": "$.eventBridgeResult",
+      "Resource": "arn:aws:states:::events:putEvents",
+      "Parameters": {
+        "Entries": [
+          {
+            "Detail": {
+              "option.$": "$.option"
+            },
+            "DetailType": "option.responded",
+            "EventBusName": "arn:aws:events:us-east-2:132260253285:event-bus/EotaBackendStackEventBus2B124535",
+            "Source": "option.responding"
+          }
+        ]
+      }
+    },
+    "Wait for Confirmation": {
+      "Type": "Wait",
+      "Seconds": 15,
+      "End": true
+    }
+  }
+}

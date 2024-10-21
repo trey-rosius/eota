@@ -1,0 +1,48 @@
+type Query {
+  getOption(id: ID): Boolean
+}
+
+input OptionInput {
+  optionId: String!
+}
+
+type ConversationResponse @aws_api_key @aws_iam {
+  id: String!
+  conversationType: CONVERSATIONTYPE!
+  imageUrl: String
+  relicId: String
+  puzzleId: String
+  message: String
+  characterId: String
+  chapterId: String
+}
+
+enum CONVERSATIONTYPE {
+  CONVERSATION
+  PUZZLE
+  RELIC
+  GENERATIVE_IMAGE
+}
+
+input NotifyOptionResponseInput {
+  id: String!
+  conversationType: CONVERSATIONTYPE!
+  imageUrl: String
+  relicId: String
+  puzzleId: String
+  message: String
+  characterId: String
+  chapterId: String
+}
+
+type Mutation {
+  sendOption(input: OptionInput!): Boolean! @aws_api_key
+  notifyOptionResponse(
+    input: NotifyOptionResponseInput!
+  ): ConversationResponse! @aws_iam @aws_api_key
+}
+
+type Subscription {
+  onOptionResponse: ConversationResponse
+    @aws_subscribe(mutations: ["notifyOptionResponse"])
+}
