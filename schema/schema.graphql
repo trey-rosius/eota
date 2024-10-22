@@ -2,6 +2,49 @@ type Query {
   getOption(id: ID): Boolean
 }
 
+type Mutation {
+  createPlayerAccount(input: CreatePlayerInput!): Player! @aws_api_key
+  updatePlayerAccount(input: UpdatedPlayerInput!): Player! @aws_api_key
+  createConversationPuzzle(input: CreatePuzzleInput!): Puzzle! @aws_api_key
+  createConversationOption(input: CreateOptionInput!): Option! @aws_api_key
+  createConversation(input: CreateConversationInput!): Conversation!
+    @aws_api_key
+  sendOption(input: OptionInput!): Boolean! @aws_api_key
+  notifyOptionResponse(
+    input: NotifyOptionResponseInput!
+  ): ConversationResponse! @aws_iam @aws_api_key
+}
+
+type Subscription {
+  onOptionResponse: ConversationResponse
+    @aws_subscribe(mutations: ["notifyOptionResponse"])
+}
+
+input CreatePlayerInput {
+  currentChapterId: String!
+  completedChapterIds: [String!]
+  solvedPuzzleIds: [String!]
+  unlockedRelicIds: [String!]
+  unlockedCharacterIds: [String!]
+}
+
+input UpdatedPlayerInput {
+  id: String!
+  currentChapterId: String!
+  completedChapterIds: [String!]
+  solvedPuzzleIds: [String!]
+  unlockedRelicIds: [String!]
+  unlockedCharacterIds: [String!]
+}
+type Player {
+  id: String!
+  currentChapterId: String!
+  completedChapterIds: [String!]
+  solvedPuzzleIds: [String!]
+  unlockedRelicIds: [String!]
+  unlockedCharacterIds: [String!]
+}
+
 input OptionInput {
   optionId: String!
 }
@@ -10,13 +53,24 @@ input CreatePuzzleInput {
   puzzleName: String!
   puzzleDescription: String!
   chapterId: String!
+  puzzleType: PUZZLETYPE!
+  encryptedMessage: String!
+  decryptedMessage: String!
+  puzzleDescription: String!
+  chapterId: String!
 }
 type Puzzle {
   id: String!
   puzzleId: String!
   puzzleName: String!
+  puzzleType: PUZZLETYPE!
+  encryptedMessage: String!
+  decryptedMessage: String!
   puzzleDescription: String!
   chapterId: String!
+}
+enum PUZZLETYPE {
+  CYPHER
 }
 type ConversationResponse @aws_api_key @aws_iam {
   id: String!
@@ -78,20 +132,4 @@ input NotifyOptionResponseInput {
   message: String
   characterId: String
   chapterId: String
-}
-
-type Mutation {
-  createConversationPuzzle(input: CreatePuzzleInput!): Puzzle! @aws_api_key
-  createConversationOption(input: CreateOptionInput!): Option! @aws_api_key
-  createConversation(input: CreateConversationInput!): Conversation!
-    @aws_api_key
-  sendOption(input: OptionInput!): Boolean! @aws_api_key
-  notifyOptionResponse(
-    input: NotifyOptionResponseInput!
-  ): ConversationResponse! @aws_iam @aws_api_key
-}
-
-type Subscription {
-  onOptionResponse: ConversationResponse
-    @aws_subscribe(mutations: ["notifyOptionResponse"])
 }
