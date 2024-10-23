@@ -52,11 +52,10 @@ input OptionInput {
 input CreatePuzzleInput {
   puzzleName: String!
   puzzleDescription: String!
-  chapterId: String!
   puzzleType: PUZZLETYPE!
   encryptedMessage: String!
   decryptedMessage: String!
-  puzzleDescription: String!
+  hint: String!
   chapterId: String!
 }
 type Puzzle {
@@ -66,6 +65,7 @@ type Puzzle {
   puzzleType: PUZZLETYPE!
   encryptedMessage: String!
   decryptedMessage: String!
+  hint: String!
   puzzleDescription: String!
   chapterId: String!
 }
