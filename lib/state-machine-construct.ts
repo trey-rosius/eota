@@ -50,7 +50,8 @@ export class OptionHandler extends Construct {
       targets: [
         new SfnStateMachine(sm, {
           input: RuleTargetInput.fromObject({
-            optionId: EventField.fromPath("$.detail.optionId"),
+            conversationId: EventField.fromPath("$.detail.conversationId"),
+            nextStepType: EventField.fromPath("$.detail.nextStepType"),
           }),
         }),
       ],

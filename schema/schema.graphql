@@ -46,7 +46,8 @@ type Player {
 }
 
 input OptionInput {
-  optionId: String!
+  nextStepType: String!
+  conversationId: String!
 }
 
 input CreatePuzzleInput {

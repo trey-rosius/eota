@@ -1,29 +1,106 @@
 {
-  "StartAt": "Wait",
+  "StartAt": "Choice",
   "States": {
+    "Choice": {
+      "Type": "Choice",
+      "Choices": [
+        {
+          "Variable": "$.nextStepType",
+          "StringEquals": "GENERATIVE_IMAGE",
+          "Next": "create generative ai image"
+        },
+        {
+          "Variable": "$.nextStepType",
+          "StringEquals": "PUZZLE",
+          "Next": "Pass (2)"
+        },
+        {
+          "Variable": "$.nextStepType",
+          "StringEquals": "RELIC",
+          "Next": "Pass (1)"
+        }
+      ],
+      "Default": "Get Conversation"
+    },
+    "create generative ai image": {
+      "Type": "Pass",
+      "Next": "Push to subscriptions (1)",
+      "Parameters": {
+        "id.$": "$.conversationId",
+        "conversationType.$": "$.nextStepType",
+        "imageUrl": "https://images.unsplash.com/photo-1475070929565-c985b496cb9f?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+      },
+      "ResultPath": "$.option"
+    },
+    "Push to subscriptions (1)": {
+      "Type": "Task",
+      "ResultPath": "$.eventBridgeResult",
+      "Resource": "arn:aws:states:::events:putEvents",
+      "Parameters": {
+        "Entries": [
+          {
+            "Detail": {
+              "option.$": "$.option"
+            },
+            "DetailType": "option.responded",
+            "EventBusName": "arn:aws:events:us-east-2:132260253285:event-bus/EotaBackendStackEventBus2B124535",
+            "Source": "option.responding"
+          }
+        ]
+      },
+      "Next": "Wait"
+    },
     "Wait": {
       "Type": "Wait",
-      "Seconds": 10,
-      "Next": "Get Next Conversation ID"
+      "Seconds": 5,
+      "Next": "Get Conversation (1)"
     },
-    "Get Next Conversation ID": {
+    "Get Conversation (1)": {
       "Type": "Task",
       "Resource": "arn:aws:states:::dynamodb:getItem",
       "Parameters": {
         "TableName": "eota",
         "Key": {
           "PK": {
-            "S.$": "States.Format('OPTION#{}',$.optionId)"
+            "S.$": "States.Format('CONVERSATION#{}',$.conversationId)"
           },
           "SK": {
-            "S.$": "States.Format('OPTION#{}',$.optionId)"
+            "S.$": "States.Format('CONVERSATION#{}',$.conversationId)"
           }
         }
       },
-      "Next": "Get Conversation",
-      "ResultSelector": {
-        "conversationId.$": "$.Item.nextConversationId.S"
+      "Next": "improve conversation (1)",
+      "ResultPath": "$.data"
+    },
+    "improve conversation (1)": {
+      "Type": "Pass",
+      "ResultPath": "$.option",
+      "Next": "Push to subscriptions (2)",
+      "Parameters": {
+        "id.$": "$.data.Item.conversationId.S",
+        "conversationType.$": "$.nextStepType",
+        "message.$": "$.data.Item.message.S",
+        "characterId.$": "$.data.Item.characterId.S",
+        "chapterId.$": "$.data.Item.chapterId.S"
       }
+    },
+    "Push to subscriptions (2)": {
+      "Type": "Task",
+      "ResultPath": "$.eventBridgeResult",
+      "Resource": "arn:aws:states:::events:putEvents",
+      "Parameters": {
+        "Entries": [
+          {
+            "Detail": {
+              "option.$": "$.option"
+            },
+            "DetailType": "option.responded",
+            "EventBusName": "arn:aws:events:us-east-2:132260253285:event-bus/EotaBackendStackEventBus2B124535",
+            "Source": "option.responding"
+          }
+        ]
+      },
+      "End": true
     },
     "Get Conversation": {
       "Type": "Task",
@@ -39,27 +116,22 @@
           }
         }
       },
-      "Next": "Update Order to PAID",
-      "ResultSelector": {
-        "id.$": "$.Item.conversationId.S",
-        "message.$": "$.Item.message.S",
-        "characterId.$": "$.Item.characterId.S",
-        "chapterId.$": "$.Item.chapterId.S"
-      }
+      "Next": "improve conversation",
+      "ResultPath": "$.data"
     },
-    "Update Order to PAID": {
+    "improve conversation": {
       "Type": "Pass",
       "ResultPath": "$.option",
       "Parameters": {
-        "id.$": "$.id",
-        "message.$": "$.message",
-        "characterId.$": "$.characterId",
-        "chapterId.$": "$.chapterId"
+        "id.$": "$.data.Item.conversationId.S",
+        "conversationType.$": "$.nextStepType",
+        "message.$": "$.data.Item.message.S",
+        "characterId.$": "$.data.Item.characterId.S",
+        "chapterId.$": "$.data.Item.chapterId.S"
       },
-      "Next": "Notify Paid"
+      "Next": "Push to subscriptions"
     },
-    "Notify Paid": {
-      "Next": "Wait for Confirmation",
+    "Push to subscriptions": {
       "Type": "Task",
       "ResultPath": "$.eventBridgeResult",
       "Resource": "arn:aws:states:::events:putEvents",
@@ -74,11 +146,15 @@
             "Source": "option.responding"
           }
         ]
-      }
+      },
+      "End": true
     },
-    "Wait for Confirmation": {
-      "Type": "Wait",
-      "Seconds": 15,
+    "Pass (2)": {
+      "Type": "Pass",
+      "End": true
+    },
+    "Pass (1)": {
+      "Type": "Pass",
       "End": true
     }
   }
