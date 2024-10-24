@@ -47,7 +47,7 @@ export class AppSync extends Construct {
         ],
       },
     });
-
+    api.addEnvironmentVariable("TABLE_NAME", eotaTable.tableName);
     const eotaDs = api.addDynamoDbDataSource("eota", eotaTable);
     const eventBridgeDs = api.addEventBridgeDataSource("EventBridge", eventBus);
     const noneDs = api.addNoneDataSource("None");
@@ -110,6 +110,60 @@ export class AppSync extends Construct {
       code: Code.fromAsset(
         "./src/resolvers/puzzle/createConversationPuzzle.js"
       ),
+    });
+
+    const getCharacterConversationIdsFunction = new AppsyncFunction(
+      this,
+      "getCharacterConversationIdsFunction",
+      {
+        api: api,
+        dataSource: eotaDs,
+        name: "getCharacterConversationIdsFunction",
+        code: Code.fromAsset(
+          "./src/resolvers/conversation/getCharacterConversationIds.js"
+        ),
+        runtime: FunctionRuntime.JS_1_0_0,
+      }
+    );
+
+    const batchGetConversationsFunction = new AppsyncFunction(
+      this,
+      "batchGetConversationFunction",
+      {
+        api: api,
+        dataSource: eotaDs,
+        name: "batchGetConversationFunction",
+        code: Code.fromAsset(
+          "./src/resolvers/conversation/batchGetConversations.js"
+        ),
+        runtime: FunctionRuntime.JS_1_0_0,
+      }
+    );
+    const afterBatchGetConversationsFunction = new AppsyncFunction(
+      this,
+      "afterBatchGetConversationsFunction",
+      {
+        api: api,
+        dataSource: eotaDs,
+        name: "afterBatchGetConversationsFunction",
+        code: Code.fromAsset(
+          "./src/resolvers/conversation/afterBatchGetConversations.js"
+        ),
+        runtime: FunctionRuntime.JS_1_0_0,
+      }
+    );
+
+    api.createResolver("getCharacterConversations", {
+      typeName: "Query",
+      code: Code.fromAsset("./src/resolvers/pipeline/default.js"),
+      fieldName: "getCharacterConversations",
+      pipelineConfig: [
+        getCharacterConversationIdsFunction,
+        batchGetConversationsFunction,
+        afterBatchGetConversationsFunction,
+      ],
+
+      runtime: FunctionRuntime.JS_1_0_0,
     });
 
     const policyStatement = new PolicyStatement({

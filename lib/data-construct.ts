@@ -28,17 +28,13 @@ export class Data extends Construct {
 
       removalPolicy: RemovalPolicy.RETAIN_ON_UPDATE_OR_DELETE,
     });
+
     this.eotaTable.addGlobalSecondaryIndex({
       indexName: "characterConversations",
       partitionKey: { name: "GSI1PK", type: AttributeType.STRING },
       sortKey: { name: "GSI1SK", type: AttributeType.STRING },
       projectionType: ProjectionType.INCLUDE,
-      nonKeyAttributes: [
-        "characterId",
-        "message",
-        "chapterId",
-        "conversationId",
-      ],
+      nonKeyAttributes: ["characterId", "message", "chapterId"],
     });
 
     this.eotaTable.addGlobalSecondaryIndex({
@@ -46,17 +42,7 @@ export class Data extends Construct {
       partitionKey: { name: "GSI2PK", type: AttributeType.STRING },
       sortKey: { name: "GSI2SK", type: AttributeType.STRING },
       projectionType: ProjectionType.INCLUDE,
-      nonKeyAttributes: [
-        "characterId",
-        "nextConversationId",
-        "chapterId",
-        "optionText",
-        "conversationId",
-        "relicId",
-        "puzzleId",
-        "nextStepType",
-        "optionId",
-      ],
+      nonKeyAttributes: ["characterId", "nextConversationId", "chapterId"],
     });
     this.eotaTable.addGlobalSecondaryIndex({
       indexName: "chapterConversations",
@@ -66,12 +52,7 @@ export class Data extends Construct {
       },
       sortKey: { name: "GSI3SK", type: AttributeType.STRING },
       projectionType: ProjectionType.INCLUDE,
-      nonKeyAttributes: [
-        "characterId",
-        "conversationId",
-        "chapterId",
-        "message",
-      ],
+      nonKeyAttributes: ["characterId", "conversationId", "chapterId"],
     });
   }
 }
