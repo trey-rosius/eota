@@ -73,10 +73,7 @@ export class AppSync extends Construct {
       fieldName: "sendOption",
       runtime: FunctionRuntime.JS_1_0_0,
       pipelineConfig: [sendOptionFunction, putEvent],
-      code: Code.fromInline(`
-        export const request = () => { return {}; }
-        export const response = (ctx) => { return ctx.result; }
-      `),
+      code: Code.fromAsset("./src/resolvers/pipeline/default.js"),
     });
 
     api.createResolver("optionResponse", {

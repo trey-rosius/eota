@@ -1,6 +1,16 @@
 type Query {
   getOption(id: ID): Boolean!
-  getCharacterConversations(characterId:String!):
+  getCharacterConversations(
+    limit: Int!
+    nextToken: String
+    characterId: String!
+  ): Conversations!
+  getChapterConversations(
+    limit: Int!
+    nextToken: String
+    chapterId: String!
+  ): Conversations!
+  getConversationOptions(conversationId: String!): Options!
 }
 
 type Mutation {
@@ -86,7 +96,6 @@ type ConversationResponse @aws_api_key @aws_iam {
   chapterId: String
 }
 
-
 type Conversation {
   id: String!
   message: String!
@@ -95,11 +104,9 @@ type Conversation {
   characterId: String!
 }
 
-
-type Conversations{
-  limit:Int!
-  nextToken:String
-  conversation:[Conversation!]!
+type Conversations {
+  nextToken: String
+  conversation: [Conversation!]!
 }
 
 enum CONVERSATIONTYPE {
@@ -127,6 +134,9 @@ type Option {
   nextConversationId: String!
   nextStepType: CONVERSATIONTYPE!
   optionText: String!
+}
+type Options {
+  option: [Option!]!
 }
 
 input CreateConversationInput {

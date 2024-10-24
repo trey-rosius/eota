@@ -1,7 +1,7 @@
 import { util } from "@aws-appsync/utils";
 import { put } from "@aws-appsync/utils/dynamodb";
 export const request = (ctx) => {
-  const { message, chapterId, characterId } = ctx.args.input;
+  const { limit, nextToken, characterId } = ctx.args.input;
   const id = util.autoId();
   const key = {
     PK: `CONVERSATION#${id}`,
@@ -25,8 +25,5 @@ export const request = (ctx) => {
 };
 
 export const response = (ctx) => {
-  if (ctx.error) {
-    util.error(ctx.error.message, ctx.error.type);
-  }
   return ctx.result;
 };

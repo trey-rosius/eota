@@ -33,7 +33,12 @@ export class Data extends Construct {
       partitionKey: { name: "GSI1PK", type: AttributeType.STRING },
       sortKey: { name: "GSI1SK", type: AttributeType.STRING },
       projectionType: ProjectionType.INCLUDE,
-      nonKeyAttributes: ["characterId", "message", "chapterId"],
+      nonKeyAttributes: [
+        "characterId",
+        "message",
+        "chapterId",
+        "conversationId",
+      ],
     });
 
     this.eotaTable.addGlobalSecondaryIndex({
@@ -41,7 +46,17 @@ export class Data extends Construct {
       partitionKey: { name: "GSI2PK", type: AttributeType.STRING },
       sortKey: { name: "GSI2SK", type: AttributeType.STRING },
       projectionType: ProjectionType.INCLUDE,
-      nonKeyAttributes: ["characterId", "nextConversationId", "chapterId"],
+      nonKeyAttributes: [
+        "characterId",
+        "nextConversationId",
+        "chapterId",
+        "optionText",
+        "conversationId",
+        "relicId",
+        "puzzleId",
+        "nextStepType",
+        "optionId",
+      ],
     });
     this.eotaTable.addGlobalSecondaryIndex({
       indexName: "chapterConversations",
@@ -51,7 +66,12 @@ export class Data extends Construct {
       },
       sortKey: { name: "GSI3SK", type: AttributeType.STRING },
       projectionType: ProjectionType.INCLUDE,
-      nonKeyAttributes: ["characterId", "conversationId", "chapterId"],
+      nonKeyAttributes: [
+        "characterId",
+        "conversationId",
+        "chapterId",
+        "message",
+      ],
     });
   }
 }
