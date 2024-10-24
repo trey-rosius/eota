@@ -1,5 +1,6 @@
 type Query {
-  getOption(id: ID): Boolean
+  getOption(id: ID): Boolean!
+  getCharacterConversations(characterId:String!):
 }
 
 type Mutation {
@@ -71,7 +72,8 @@ type Puzzle {
   chapterId: String!
 }
 enum PUZZLETYPE {
-  CYPHER
+  CYPHER_AND_RIDDLE
+  LOGIC_PUZZLE_AND_PATTERN_RECOGNITION
 }
 type ConversationResponse @aws_api_key @aws_iam {
   id: String!
@@ -82,6 +84,22 @@ type ConversationResponse @aws_api_key @aws_iam {
   message: String
   characterId: String
   chapterId: String
+}
+
+
+type Conversation {
+  id: String!
+  message: String!
+  conversationId: String!
+  chapterId: String!
+  characterId: String!
+}
+
+
+type Conversations{
+  limit:Int!
+  nextToken:String
+  conversation:[Conversation!]!
 }
 
 enum CONVERSATIONTYPE {
@@ -113,13 +131,6 @@ type Option {
 
 input CreateConversationInput {
   message: String!
-  chapterId: String!
-  characterId: String!
-}
-type Conversation {
-  id: String!
-  message: String!
-  conversationId: String!
   chapterId: String!
   characterId: String!
 }
