@@ -10,7 +10,7 @@ export function request(ctx) {
   return {
     operation: "BatchGetItem",
     tables: {
-      eota: {
+      table_name: {
         keys: items.map((item) => {
           const parts = item.GSI1SK.split("#");
           const conversationId = parts[1];
@@ -38,7 +38,7 @@ export function response(ctx) {
   if (ctx.error) {
     util.error(ctx.error.message, ctx.error.type);
   }
-  console.log(`response results  ${ctx.result.data["eota"]}`);
+  console.log(`response results  ${ctx.result.data[table_name]}`);
 
   return ctx.result.data[table_name];
 }

@@ -136,7 +136,7 @@ type Option {
   optionText: String!
 }
 type Options {
-  option: [Option!]!
+  items: [Option!]!
 }
 
 input CreateConversationInput {
