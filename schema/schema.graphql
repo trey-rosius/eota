@@ -106,7 +106,7 @@ type Conversation {
 
 type Conversations {
   nextToken: String
-  conversation: [Conversation!]!
+  items: [Conversation!]!
 }
 
 enum CONVERSATIONTYPE {

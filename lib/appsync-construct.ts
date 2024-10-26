@@ -47,6 +47,7 @@ export class AppSync extends Construct {
         ],
       },
     });
+
     api.addEnvironmentVariable("TABLE_NAME", eotaTable.tableName);
     const eotaDs = api.addDynamoDbDataSource("eota", eotaTable);
     const eventBridgeDs = api.addEventBridgeDataSource("EventBridge", eventBus);
@@ -144,7 +145,7 @@ export class AppSync extends Construct {
       "afterBatchGetConversationsFunction",
       {
         api: api,
-        dataSource: eotaDs,
+        dataSource: noneDs,
         name: "afterBatchGetConversationsFunction",
         code: Code.fromAsset(
           "./src/resolvers/conversation/afterBatchGetConversations.js"
