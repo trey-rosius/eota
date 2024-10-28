@@ -123,11 +123,15 @@ input CreateOptionInput {
   nextConversationId: String!
   nextStepType: CONVERSATIONTYPE!
   optionText: String!
+  hasNarration: Boolean!
+  narration: [String!]
 }
 
 type Option {
   id: String!
   optionId: String!
+  hasNarration: Boolean!
+  narration: [String!]
   relicId: String
   puzzleId: String
   conversationId: String!
