@@ -11,6 +11,7 @@ type Query {
     chapterId: String!
   ): Conversations!
   getConversationOptions(conversationId: String!): Options!
+  getChapter(id: String!): Chapter!
 }
 
 type Mutation {
@@ -20,6 +21,8 @@ type Mutation {
   createConversationOption(input: CreateOptionInput!): Option! @aws_api_key
   createConversation(input: CreateConversationInput!): Conversation!
     @aws_api_key
+  createChapter(input: CreateChapterInput!): Chapter!
+
   sendOption(input: OptionInput!): Boolean! @aws_api_key
   notifyOptionResponse(
     input: NotifyOptionResponseInput!
@@ -123,15 +126,18 @@ input CreateOptionInput {
   nextConversationId: String!
   nextStepType: CONVERSATIONTYPE!
   optionText: String!
-  hasNarration: Boolean!
-  narration: [String!]
+}
+input CreateChapterInput {
+  chapterTitle: String!
+}
+type Chapter {
+  id: String!
+  chapterTitle: String!
 }
 
 type Option {
   id: String!
   optionId: String!
-  hasNarration: Boolean!
-  narration: [String!]
   relicId: String
   puzzleId: String
   conversationId: String!
