@@ -12,14 +12,14 @@ export function request(ctx) {
     tables: {
       eota: {
         keys: items.map((item) => {
-          const parts = item.GSI1SK.split("#");
-          const conversationId = parts[1];
+          const parts = item.GSI2SK.split("#");
+          const optionId = parts[1];
 
-          console.log(`conversation id is ${conversationId}`);
+          console.log(`option id is ${optionId}`);
 
           return util.dynamodb.toMapValues({
-            PK: `CONVERSATION#${conversationId}`,
-            SK: `CONVERSATION#${conversationId}`,
+            PK: `OPTION#${optionId}`,
+            SK: `OPTION#${optionId}`,
           });
         }),
         consistentRead: true,

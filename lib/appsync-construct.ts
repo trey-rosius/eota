@@ -127,7 +127,43 @@ export class AppSync extends Construct {
         "./src/resolvers/puzzle/createConversationPuzzle.js"
       ),
     });
+    const getConversationOptionsIdsFunction = new AppsyncFunction(
+      this,
+      "getConversationOptionsIdsFunction",
+      {
+        api: api,
+        dataSource: eotaDs,
+        name: "getConversationOptionsIdsFunction",
+        code: Code.fromAsset(
+          "./src/resolvers/option/getConversationOptionsIds.js"
+        ),
+        runtime: FunctionRuntime.JS_1_0_0,
+      }
+    );
 
+    const batchGetOptionsFunction = new AppsyncFunction(
+      this,
+      "batchGetOptionsFunction",
+      {
+        api: api,
+        dataSource: eotaDs,
+        name: "batchGetOptionsFunction",
+        code: Code.fromAsset("./src/resolvers/option/batchGetOptions.js"),
+        runtime: FunctionRuntime.JS_1_0_0,
+      }
+    );
+
+    const afterBatchGetOptionsFunction = new AppsyncFunction(
+      this,
+      "afterBatchGetOptionsFunction",
+      {
+        api: api,
+        dataSource: noneDs,
+        name: "afterBatchGetOptionsFunction",
+        code: Code.fromAsset("./src/resolvers/option/afterBatchGetOptions.js"),
+        runtime: FunctionRuntime.JS_1_0_0,
+      }
+    );
     const getCharacterConversationIdsFunction = new AppsyncFunction(
       this,
       "getCharacterConversationIdsFunction",
@@ -177,6 +213,18 @@ export class AppSync extends Construct {
         getCharacterConversationIdsFunction,
         batchGetConversationsFunction,
         afterBatchGetConversationsFunction,
+      ],
+
+      runtime: FunctionRuntime.JS_1_0_0,
+    });
+    api.createResolver("getConversationsOptions", {
+      typeName: "Query",
+      code: Code.fromAsset("./src/resolvers/pipeline/default.js"),
+      fieldName: "getConversationOptions",
+      pipelineConfig: [
+        getConversationOptionsIdsFunction,
+        batchGetOptionsFunction,
+        afterBatchGetOptionsFunction,
       ],
 
       runtime: FunctionRuntime.JS_1_0_0,

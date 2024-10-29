@@ -1,21 +1,23 @@
 import { util } from "@aws-appsync/utils";
-import { get } from "@aws-appsync/utils/dynamodb";
+import { query } from "@aws-appsync/utils/dynamodb";
 export const request = (ctx) => {
-  const { id } = ctx.args;
-
+  const { limit, nextToken, characterId } = ctx.args;
+  const index = "characterConversations";
   const key = {
-    PK: `CHAPTER#${id}`,
-    SK: `CHAPTER#${id}`,
+    GSI1PK: { eq: `CHARACTERID#${characterId}` },
+    GSI1SK: { beginsWith: "CONVERSATION#" },
   };
 
-  return get({
-    key: key,
+  return query({
+    query: key,
+    limit,
+    nextToken,
+    index,
+    scanIndexForward: false,
   });
 };
 
 export const response = (ctx) => {
-  if (ctx.error) {
-    util.error(ctx.error.message, ctx.error.type);
-  }
+  ctx.stash.nextToken = ctx.result.nextToken;
   return ctx.result;
 };

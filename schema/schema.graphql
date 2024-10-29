@@ -12,6 +12,7 @@ type Query {
   ): Conversations!
   getConversationOptions(conversationId: String!): Options!
   getChapter(id: String!): Chapter!
+  getAllChapters(limit: Int!): Chapters!
 }
 
 type Mutation {
@@ -133,6 +134,10 @@ input CreateChapterInput {
 type Chapter {
   id: String!
   chapterTitle: String!
+}
+
+type Chapters {
+  items: [Chapter!]!
 }
 
 type Option {
