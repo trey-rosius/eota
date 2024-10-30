@@ -14,6 +14,8 @@ type Query {
   getConversationOptions(conversationId: String!): Options!
   getChapter(chapterId: String!): Chapter!
   getChapters(limit: Int!, nextToken: String): Chapters!
+  getCharacter(characterId: String!): Character!
+  getCharacters: Characters!
 }
 
 type Mutation {
@@ -24,6 +26,7 @@ type Mutation {
   createConversation(input: CreateConversationInput!): Conversation!
     @aws_api_key
   createChapter(input: CreateChapterInput!): Chapter!
+  createCharacter(input: CreateCharacterInput!): Character! @aws_api_key
 
   sendOption(input: OptionInput!): Boolean! @aws_api_key
   notifyOptionResponse(
@@ -51,6 +54,27 @@ input UpdatedPlayerInput {
   solvedPuzzleIds: [String!]
   unlockedRelicIds: [String!]
   unlockedCharacterIds: [String!]
+}
+type Characters {
+  items: [Character!]!
+}
+type Character {
+  id: String!
+  characterName: String!
+  characterBackstory: String!
+  role: CHARACTER_ROLE!
+  conversation: [Conversation!]
+}
+input CreateCharacterInput {
+  characterName: String!
+  characterBackstory: String!
+  role: CHARACTER_ROLE!
+}
+enum CHARACTER_ROLE {
+  LIBRARIAN
+  GUIDE
+  MAYOR
+  HISTORIAN_PROFESSOR
 }
 type Player {
   id: String!

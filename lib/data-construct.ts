@@ -54,5 +54,15 @@ export class Data extends Construct {
       projectionType: ProjectionType.INCLUDE,
       nonKeyAttributes: ["characterId", "conversationId", "chapterId"],
     });
+
+    this.eotaTable.addGlobalSecondaryIndex({
+      indexName: "getCharacters",
+      partitionKey: {
+        name: "GSI4PK",
+        type: AttributeType.STRING,
+      },
+      sortKey: { name: "GSI4SK", type: AttributeType.STRING },
+      projectionType: ProjectionType.ALL,
+    });
   }
 }

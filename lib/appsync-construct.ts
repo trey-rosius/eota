@@ -75,6 +75,27 @@ export class AppSync extends Construct {
       dataSource: eotaDs,
       code: Code.fromAsset("./src/resolvers/chapter/createChapter.js"),
     });
+    api.createResolver("createCharacter", {
+      typeName: "Mutation",
+      fieldName: "createCharacter",
+      runtime: FunctionRuntime.JS_1_0_0,
+      dataSource: eotaDs,
+      code: Code.fromAsset("./src/resolvers/character/createCharacter.js"),
+    });
+    api.createResolver("getCharacter", {
+      typeName: "Query",
+      fieldName: "getCharacter",
+      runtime: FunctionRuntime.JS_1_0_0,
+      dataSource: eotaDs,
+      code: Code.fromAsset("./src/resolvers/character/getCharacter.js"),
+    });
+    api.createResolver("getCharacters", {
+      typeName: "Query",
+      fieldName: "getCharacters",
+      runtime: FunctionRuntime.JS_1_0_0,
+      dataSource: eotaDs,
+      code: Code.fromAsset("./src/resolvers/character/getCharacters.js"),
+    });
 
     api.createResolver("getChapter", {
       typeName: "Query",
