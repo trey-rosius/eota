@@ -10,6 +10,7 @@ type Query {
     nextToken: String
     chapterId: String!
   ): Conversations!
+  getPuzzle(puzzleId: String!): Puzzle!
   getConversationOptions(conversationId: String!): Options!
   getChapter(id: String!): Chapter!
   getAllChapters(limit: Int!): Chapters!
