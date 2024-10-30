@@ -12,8 +12,8 @@ type Query {
   ): Conversations!
   getPuzzle(puzzleId: String!): Puzzle!
   getConversationOptions(conversationId: String!): Options!
-  getChapter(id: String!): Chapter!
-  getAllChapters(limit: Int!): Chapters!
+  getChapter(chapterId: String!): Chapter!
+  getChapters(limit: Int!, nextToken: String): Chapters!
 }
 
 type Mutation {
@@ -138,6 +138,7 @@ type Chapter {
 }
 
 type Chapters {
+  nextToken: String
   items: [Chapter!]!
 }
 

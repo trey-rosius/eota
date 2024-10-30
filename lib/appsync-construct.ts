@@ -83,6 +83,13 @@ export class AppSync extends Construct {
       dataSource: eotaDs,
       code: Code.fromAsset("./src/resolvers/chapter/getChapter.js"),
     });
+    api.createResolver("getChapters", {
+      typeName: "Query",
+      fieldName: "getChapters",
+      runtime: FunctionRuntime.JS_1_0_0,
+      dataSource: eotaDs,
+      code: Code.fromAsset("./src/resolvers/chapter/getChapters.js"),
+    });
 
     api.createResolver("SendOption", {
       typeName: "Mutation",
