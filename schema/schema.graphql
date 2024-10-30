@@ -11,6 +11,7 @@ type Query {
     chapterId: String!
   ): Conversations!
   getPuzzle(puzzleId: String!): Puzzle!
+  getPuzzles(limit: Int!): Puzzles!
   getConversationOptions(conversationId: String!): Options!
   getChapter(chapterId: String!): Chapter!
   getChapters(limit: Int!, nextToken: String): Chapters!
@@ -109,6 +110,9 @@ type Puzzle {
   hint: String!
   puzzleDescription: String!
   chapterId: String!
+}
+type Puzzles {
+  items: [Puzzle!]!
 }
 enum PUZZLETYPE {
   CYPHER_AND_RIDDLE

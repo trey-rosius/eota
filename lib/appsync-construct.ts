@@ -264,6 +264,13 @@ export class AppSync extends Construct {
       dataSource: eotaDs,
       code: Code.fromAsset("./src/resolvers/puzzle/getPuzzle.js"),
     });
+    api.createResolver("getPuzzles", {
+      typeName: "Query",
+      fieldName: "getPuzzles",
+      runtime: FunctionRuntime.JS_1_0_0,
+      dataSource: eotaDs,
+      code: Code.fromAsset("./src/resolvers/puzzle/getPuzzles.js"),
+    });
 
     const policyStatement = new PolicyStatement({
       effect: Effect.ALLOW,
