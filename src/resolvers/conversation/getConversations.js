@@ -2,10 +2,10 @@ import { util } from "@aws-appsync/utils";
 import { query } from "@aws-appsync/utils/dynamodb";
 export const request = (ctx) => {
   const { limit, nextToken } = ctx.args;
-  const index = "getConversations";
+  const index = "getAllConversations";
   const key = {
-    GSI4PK: { eq: `CONVERSATION#` },
-    GSI4SK: { beginsWith: "CONVERSATION#" },
+    GSI5PK: { eq: `CONVERSATION#` },
+    GSI5SK: { beginsWith: "CONVERSATION#" },
   };
 
   return query({

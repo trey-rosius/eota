@@ -272,6 +272,31 @@ export class AppSync extends Construct {
       code: Code.fromAsset("./src/resolvers/puzzle/getPuzzles.js"),
     });
 
+    api.createResolver("updateConversation", {
+      typeName: "Mutation",
+      fieldName: "updateConversation",
+      runtime: FunctionRuntime.JS_1_0_0,
+      dataSource: eotaDs,
+      code: Code.fromAsset(
+        "./src/resolvers/conversation/updateConversation.js"
+      ),
+    });
+
+    api.createResolver("getConversation", {
+      typeName: "Query",
+      fieldName: "getConversation",
+      runtime: FunctionRuntime.JS_1_0_0,
+      dataSource: eotaDs,
+      code: Code.fromAsset("./src/resolvers/conversation/getConversation.js"),
+    });
+    api.createResolver("getConversations", {
+      typeName: "Query",
+      fieldName: "getConversations",
+      runtime: FunctionRuntime.JS_1_0_0,
+      dataSource: eotaDs,
+      code: Code.fromAsset("./src/resolvers/conversation/getConversations.js"),
+    });
+
     const policyStatement = new PolicyStatement({
       effect: Effect.ALLOW,
       actions: ["appsync:GraphQL"],

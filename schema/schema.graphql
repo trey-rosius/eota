@@ -10,7 +10,7 @@ type Query {
     nextToken: String
     chapterId: String!
   ): Conversations!
-  getAllConversations(limit: Int!, nextToken: String): Conversations!
+  getConversations(limit: Int!, nextToken: String): Conversations!
   getPuzzle(puzzleId: String!): Puzzle!
   getPuzzles(limit: Int!): Puzzles!
   getConversationOptions(conversationId: String!): Options!
@@ -28,6 +28,9 @@ type Mutation {
   createConversationOption(input: CreateOptionInput!): Option! @aws_api_key
   createConversation(input: CreateConversationInput!): Conversation!
     @aws_api_key
+  updateConversation(input: UpdateConversationInput!): Conversation!
+    @aws_api_key
+
   createChapter(input: CreateChapterInput!): Chapter!
   createCharacter(input: CreateCharacterInput!): Character! @aws_api_key
 
@@ -190,6 +193,12 @@ input CreateConversationInput {
   message: String!
   chapterId: String!
   characterId: String!
+}
+input UpdateConversationInput {
+  id: String!
+  message: String!
+  chapterId: String
+  characterId: String
 }
 
 input NotifyOptionResponseInput {

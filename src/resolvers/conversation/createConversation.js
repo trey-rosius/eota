@@ -16,6 +16,8 @@ export const request = (ctx) => {
     GSI1SK: `CONVERSATION#${id}`,
     GSI3PK: `CHAPTERID#${chapterId}`,
     GSI3SK: `CONVERSATION#${id}`,
+    GSI5PK: `CONVERSATION#`,
+    GSI5SK: `CONVERSATION#${id}`,
   };
 
   return put({
