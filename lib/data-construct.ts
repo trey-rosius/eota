@@ -64,5 +64,14 @@ export class Data extends Construct {
       sortKey: { name: "GSI4SK", type: AttributeType.STRING },
       projectionType: ProjectionType.ALL,
     });
+    this.eotaTable.addGlobalSecondaryIndex({
+      indexName: "getAllConversations",
+      partitionKey: {
+        name: "GSI5PK",
+        type: AttributeType.STRING,
+      },
+      sortKey: { name: "GSI5SK", type: AttributeType.STRING },
+      projectionType: ProjectionType.ALL,
+    });
   }
 }
