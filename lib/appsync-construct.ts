@@ -312,7 +312,7 @@ export class AppSync extends Construct {
       },
     });
 
-    new CfnRule(scope, "OptionResponse", {
+    new CfnRule(scope, "ConversationResponse", {
       eventBusName: eventBus.eventBusName,
       eventPattern: {
         source: ["option.responding"],
@@ -324,7 +324,7 @@ export class AppSync extends Construct {
           arn: (api.node.defaultChild as CfnGraphQLApi).attrGraphQlEndpointArn,
           roleArn: ebRuleRole.roleArn,
           appSyncParameters: {
-            graphQlOperation: `mutation NotifyOptionResponse($input: NotifyOptionResponseInput!) { notifyOptionResponse(input: $input) { id conversationType imageUrl relicId puzzleId message characterId chapterId} }`,
+            graphQlOperation: `mutation NotifyConversationResponse($input: ConversationResponseInput!) { notifyConversationResponse(input: $input) { id conversationType imageUrl relicId puzzleId message characterId chapterId} }`,
           },
           inputTransformer: {
             inputPathsMap: {

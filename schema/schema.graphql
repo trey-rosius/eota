@@ -35,14 +35,14 @@ type Mutation {
   createCharacter(input: CreateCharacterInput!): Character! @aws_api_key
 
   sendOption(input: OptionInput!): Boolean! @aws_api_key
-  notifyOptionResponse(
-    input: NotifyOptionResponseInput!
+  notifyConversationResponse(
+    input: ConversationResponseInput!
   ): ConversationResponse! @aws_iam @aws_api_key
 }
 
 type Subscription {
-  onOptionResponse: ConversationResponse
-    @aws_subscribe(mutations: ["notifyOptionResponse"])
+  onNotifyConversationResponse: ConversationResponse
+    @aws_subscribe(mutations: ["notifyConversationResponse"])
 }
 
 input CreatePlayerInput {
@@ -140,6 +140,8 @@ type Conversation {
   conversationId: String!
   chapterId: String!
   characterId: String!
+  hasOptions: Boolean!
+  options: [Option!]
 }
 
 type Conversations {
@@ -201,7 +203,7 @@ input UpdateConversationInput {
   characterId: String
 }
 
-input NotifyOptionResponseInput {
+input ConversationResponseInput {
   id: String!
   conversationType: CONVERSATIONTYPE!
   imageUrl: String
