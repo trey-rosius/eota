@@ -21,5 +21,5 @@ export const response = (ctx) => {
   if (ctx.error) {
     util.error(ctx.error.message, ctx.error.type);
   }
-  return ctx.ars.input;
+  return ctx.args.input;
 };

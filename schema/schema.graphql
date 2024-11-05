@@ -94,7 +94,8 @@ type Player {
 input OptionInput {
   gameState: GAMESTATE!
   nextStepType: String!
-  conversationId: String!
+  conversationId: String
+  optionId: String
 }
 enum GAMESTATE {
   NEW
