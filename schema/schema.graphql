@@ -33,7 +33,6 @@ type Mutation {
 
   createChapter(input: CreateChapterInput!): Chapter!
   createCharacter(input: CreateCharacterInput!): Character! @aws_api_key
-
   sendOption(input: OptionInput!): Boolean! @aws_api_key
   notifyConversationResponse(
     input: ConversationResponseInput!
@@ -42,6 +41,7 @@ type Mutation {
 
 type Subscription {
   onNotifyConversationResponse: ConversationResponse
+    @aws_api_key
     @aws_subscribe(mutations: ["notifyConversationResponse"])
 }
 
@@ -92,8 +92,13 @@ type Player {
 }
 
 input OptionInput {
+  gameState: GAMESTATE!
   nextStepType: String!
   conversationId: String!
+}
+enum GAMESTATE {
+  NEW
+  CONTINUE
 }
 
 input CreatePuzzleInput {
@@ -203,7 +208,7 @@ input UpdateConversationInput {
   characterId: String
 }
 
-input ConversationResponseInput {
+input ConversationResponseInput @aws_api_key {
   id: String!
   conversationType: CONVERSATIONTYPE!
   imageUrl: String

@@ -23,9 +23,7 @@ export class Data extends Construct {
         type: AttributeType.STRING,
       },
       tableName: "eota",
-
       billingMode: BillingMode.PAY_PER_REQUEST,
-
       removalPolicy: RemovalPolicy.RETAIN_ON_UPDATE_OR_DELETE,
     });
 

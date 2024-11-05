@@ -1,7 +1,66 @@
 {
-  "StartAt": "Choice",
+  "StartAt": "Start New Game Or Continue",
   "States": {
-    "Choice": {
+    "Start New Game Or Continue": {
+      "Type": "Choice",
+      "Choices": [
+        {
+          "Variable": "$.gameState",
+          "StringMatches": "CONTINUE",
+          "Comment": "continues gameplay with OptionID",
+          "Next": "What's the nextStepType ?"
+        }
+      ],
+      "Default": "retrieve game start message"
+    },
+    "retrieve game start message": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::dynamodb:getItem",
+      "Parameters": {
+        "TableName": "eota",
+        "Key": {
+          "PK": {
+            "S.$": "States.Format('CONVERSATION#{}',$.conversationId)"
+          },
+          "SK": {
+            "S.$": "States.Format('CONVERSATION#{}',$.conversationId)"
+          }
+        }
+      },
+      "Next": "filter and enhance conversation",
+      "ResultPath": "$.data"
+    },
+    "filter and enhance conversation": {
+      "Type": "Pass",
+      "ResultPath": "$.option",
+      "Parameters": {
+        "id.$": "$.data.Item.conversationId.S",
+        "conversationType.$": "$.nextStepType",
+        "message.$": "$.data.Item.message.S",
+        "characterId.$": "$.data.Item.characterId.S",
+        "chapterId.$": "$.data.Item.chapterId.S"
+      },
+      "Next": "push conversation to frontend"
+    },
+    "push conversation to frontend": {
+      "Type": "Task",
+      "ResultPath": "$.eventBridgeResult",
+      "Resource": "arn:aws:states:::events:putEvents",
+      "Parameters": {
+        "Entries": [
+          {
+            "Detail": {
+              "option.$": "$.option"
+            },
+            "DetailType": "option.responded",
+            "EventBusName": "arn:aws:events:us-east-2:132260253285:event-bus/EotaBackendStackEventBus2B124535",
+            "Source": "option.responding"
+          }
+        ]
+      },
+      "End": true
+    },
+    "What's the nextStepType ?": {
       "Type": "Choice",
       "Choices": [
         {

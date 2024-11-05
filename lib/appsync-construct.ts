@@ -120,12 +120,12 @@ export class AppSync extends Construct {
       code: Code.fromAsset("./src/resolvers/pipeline/default.js"),
     });
 
-    api.createResolver("optionResponse", {
+    api.createResolver("notifyConversationResponse", {
       typeName: "Mutation",
-      fieldName: "notifyOptionResponse",
+      fieldName: "notifyConversationResponse",
       runtime: FunctionRuntime.JS_1_0_0,
       dataSource: noneDs,
-      code: Code.fromAsset("./src/resolvers/notifyOptionResponse.js"),
+      code: Code.fromAsset("./src/resolvers/notifyConversationResponse.js"),
     });
     api.createResolver("createConversation", {
       typeName: "Mutation",
@@ -320,11 +320,11 @@ export class AppSync extends Construct {
       },
       targets: [
         {
-          id: "OptionResponse",
+          id: "ConversationResponse",
           arn: (api.node.defaultChild as CfnGraphQLApi).attrGraphQlEndpointArn,
           roleArn: ebRuleRole.roleArn,
           appSyncParameters: {
-            graphQlOperation: `mutation NotifyConversationResponse($input: ConversationResponseInput!) { notifyConversationResponse(input: $input) { id conversationType imageUrl relicId puzzleId message characterId chapterId} }`,
+            graphQlOperation: `mutation NotifyConversationResponse($input:ConversationResponseInput!) { notifyConversationResponse(input: $input) { id conversationType imageUrl relicId puzzleId message characterId chapterId} }`,
           },
           inputTransformer: {
             inputPathsMap: {

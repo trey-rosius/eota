@@ -5,17 +5,7 @@ import {
   Rule,
   RuleTargetInput,
 } from "aws-cdk-lib/aws-events";
-import {
-  Chain,
-  DefinitionBody,
-  Pass,
-  StateMachine,
-  TaskInput,
-  Wait,
-  WaitTime,
-} from "aws-cdk-lib/aws-stepfunctions";
-import { Duration } from "aws-cdk-lib";
-
+import { DefinitionBody, StateMachine } from "aws-cdk-lib/aws-stepfunctions";
 import { SfnStateMachine } from "aws-cdk-lib/aws-events-targets";
 import { ITable } from "aws-cdk-lib/aws-dynamodb";
 
@@ -51,6 +41,7 @@ export class OptionHandler extends Construct {
         new SfnStateMachine(sm, {
           input: RuleTargetInput.fromObject({
             conversationId: EventField.fromPath("$.detail.conversationId"),
+            gameState: EventField.fromPath("$.detail.gameState"),
             nextStepType: EventField.fromPath("$.detail.nextStepType"),
           }),
         }),
