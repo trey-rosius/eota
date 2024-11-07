@@ -69,12 +69,16 @@ type Character {
   characterName: String!
   characterBackstory: String!
   role: CHARACTER_ROLE!
+  baseHealth: Int
+  baseMana: Int
   conversation: [Conversation!]
 }
 input CreateCharacterInput {
   characterName: String!
   characterBackstory: String!
   role: CHARACTER_ROLE!
+  baseHealth: Int
+  baseMana: Int
 }
 enum CHARACTER_ROLE {
   LIBRARIAN
@@ -134,6 +138,8 @@ type ConversationResponse @aws_api_key @aws_iam {
   conversationType: CONVERSATIONTYPE!
   imageUrl: String
   relicId: String
+  hasOptions: Boolean
+  firstConversation: Boolean
   puzzleId: String
   message: String
   characterId: String
@@ -147,6 +153,7 @@ type Conversation {
   chapterId: String!
   characterId: String!
   hasOptions: Boolean!
+  firstConversation: Boolean!
   options: [Option!]
 }
 
@@ -201,17 +208,23 @@ input CreateConversationInput {
   message: String!
   chapterId: String!
   characterId: String!
+  hasOptions: Boolean!
+  firstConversation: Boolean!
 }
 input UpdateConversationInput {
   id: String!
   message: String!
+  firstConversation: Boolean!
   chapterId: String
   characterId: String
+  hasOptions: Boolean
 }
 
 input ConversationResponseInput @aws_api_key {
   id: String!
   conversationType: CONVERSATIONTYPE!
+  firstConversation: Boolean!
+  hasOptions: Boolean!
   imageUrl: String
   relicId: String
   puzzleId: String

@@ -324,7 +324,8 @@ export class AppSync extends Construct {
           arn: (api.node.defaultChild as CfnGraphQLApi).attrGraphQlEndpointArn,
           roleArn: ebRuleRole.roleArn,
           appSyncParameters: {
-            graphQlOperation: `mutation NotifyConversationResponse($input:ConversationResponseInput!) { notifyConversationResponse(input: $input) { id conversationType imageUrl relicId puzzleId message characterId chapterId} }`,
+            graphQlOperation: `mutation NotifyConversationResponse($input:ConversationResponseInput!) { notifyConversationResponse(input: $input) { id conversationType imageUrl relicId puzzleId message 
+            hasOptions firstConversation characterId chapterId} }`,
           },
           inputTransformer: {
             inputPathsMap: {
@@ -333,6 +334,8 @@ export class AppSync extends Construct {
               imageUrl: "$.detail.option.imageUrl",
               relicId: "$.detail.option.relicId",
               puzzleId: "$.detail.option.puzzleId",
+              firstConversation: "$.detail.option.firstConversation",
+              hasOptions: "$.detail.option.hasOptions",
               message: "$.detail.option.message",
               characterId: "$.detail.option.characterId",
               chapterId: "$.detail.option.chapterId",
@@ -344,6 +347,8 @@ export class AppSync extends Construct {
                 imageUrl: "<imageUrl>",
                 relicId: "<relicId>",
                 puzzleId: "<puzzleId>",
+                firstConversation: "<firstConversation>",
+                hasOptions: "<hasOptions>",
                 message: "<message>",
                 characterId: "<characterId>",
                 chapterId: "<chapterId>",
