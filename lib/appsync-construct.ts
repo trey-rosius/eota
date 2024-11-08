@@ -146,6 +146,16 @@ export class AppSync extends Construct {
       ),
     });
 
+    api.createResolver("updateConversationOption", {
+      typeName: "Mutation",
+      fieldName: "updateConversationOption",
+      runtime: FunctionRuntime.JS_1_0_0,
+      dataSource: eotaDs,
+      code: Code.fromAsset(
+        "./src/resolvers/option/updateConversationOption.js"
+      ),
+    });
+
     api.createResolver("createConversationPuzzle", {
       typeName: "Mutation",
       fieldName: "createConversationPuzzle",

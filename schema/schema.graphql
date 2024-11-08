@@ -26,6 +26,7 @@ type Mutation {
   updatePlayerAccount(input: UpdatedPlayerInput!): Player! @aws_api_key
   createConversationPuzzle(input: CreatePuzzleInput!): Puzzle! @aws_api_key
   createConversationOption(input: CreateOptionInput!): Option! @aws_api_key
+  updateConversationOption(input: UpdateOptionInput!): Option! @aws_api_key
   createConversation(input: CreateConversationInput!): Conversation!
     @aws_api_key
   updateConversation(input: UpdateConversationInput!): Conversation!
@@ -176,6 +177,16 @@ input CreateOptionInput {
   nextConversationId: String!
   nextStepType: CONVERSATIONTYPE!
   optionText: String!
+}
+
+input UpdateOptionInput {
+  id: String!
+  conversationId: String!
+  nextConversationId: String!
+  nextStepType: CONVERSATIONTYPE!
+  optionText: String!
+  relicId: String
+  puzzleId: String
 }
 input CreateChapterInput {
   chapterTitle: String!
