@@ -4,16 +4,15 @@ import { update, operations } from "@aws-appsync/utils/dynamodb";
 
 export const request = (ctx) => {
   console.log(ctx.args.input);
-  const { id, conversationId } = ctx.args.input;
+  const { id } = ctx.args.input;
 
   const key = {
-    PK: `CONVERSATION#${conversationId}`,
-    SK: `OPTION#${id}`,
+    PK: `RELIC#${id}`,
+    SK: `RELIC#${id}`,
   };
 
   return update({
     key,
-    optionId: id,
     update: {
       ...ctx.args.input,
       updatedAt: operations.add(util.time.nowISO8601()),

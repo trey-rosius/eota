@@ -307,6 +307,37 @@ export class AppSync extends Construct {
       code: Code.fromAsset("./src/resolvers/conversation/getConversations.js"),
     });
 
+    api.createResolver("createRelic", {
+      typeName: "Mutation",
+      fieldName: "createRelic",
+      runtime: FunctionRuntime.JS_1_0_0,
+      dataSource: eotaDs,
+      code: Code.fromAsset("./src/resolvers/relic/createRelic.js"),
+    });
+
+    api.createResolver("updateRelic", {
+      typeName: "Mutation",
+      fieldName: "updateRelic",
+      runtime: FunctionRuntime.JS_1_0_0,
+      dataSource: eotaDs,
+      code: Code.fromAsset("./src/resolvers/relic/updateRelic.js"),
+    });
+
+    api.createResolver("getRelic", {
+      typeName: "Query",
+      fieldName: "getRelic",
+      runtime: FunctionRuntime.JS_1_0_0,
+      dataSource: eotaDs,
+      code: Code.fromAsset("./src/resolvers/relic/getRelic.js"),
+    });
+    api.createResolver("getRelics", {
+      typeName: "Query",
+      fieldName: "getRelics",
+      runtime: FunctionRuntime.JS_1_0_0,
+      dataSource: eotaDs,
+      code: Code.fromAsset("./src/resolvers/relic/getRelics.js"),
+    });
+
     const policyStatement = new PolicyStatement({
       effect: Effect.ALLOW,
       actions: ["appsync:GraphQL"],

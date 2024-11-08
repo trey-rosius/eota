@@ -19,10 +19,14 @@ type Query {
   getCharacter(characterId: String!): Character!
   getCharacters: Characters!
   getConversation(conversationId: String): Conversation!
+  getRelics: Relics! @aws_api_key
+  getRelic(relicId: String!): Relic! @aws_api_key
 }
 
 type Mutation {
   createPlayerAccount(input: CreatePlayerInput!): Player! @aws_api_key
+  createRelic(input: CreateRelicInput!): Relic! @aws_api_key
+  updateRelic(input: UpdateRelicInput!): Relic! @aws_api_key
   updatePlayerAccount(input: UpdatedPlayerInput!): Player! @aws_api_key
   createConversationPuzzle(input: CreatePuzzleInput!): Puzzle! @aws_api_key
   createConversationOption(input: CreateOptionInput!): Option! @aws_api_key
@@ -170,6 +174,38 @@ enum CONVERSATIONTYPE {
   GENERATIVE_IMAGE
 }
 
+type Relics {
+  items: [Relic!]!
+}
+
+type Relic {
+  id: String!
+  name: String!
+  puzzleId: String!
+  characterId: String!
+  chapterId: String!
+  description: String!
+  imageUrl: String!
+}
+
+input CreateRelicInput {
+  name: String!
+  puzzleId: String!
+  characterId: String!
+  chapterId: String!
+  description: String!
+  imageUrl: String!
+}
+input UpdateRelicInput {
+  id: String!
+  name: String!
+  puzzleId: String
+  characterId: String
+  chapterId: String
+  description: String!
+  imageUrl: String!
+}
+
 input CreateOptionInput {
   relicId: String
   puzzleId: String
@@ -203,7 +239,6 @@ type Chapters {
 
 type Option {
   id: String!
-  optionId: String!
   relicId: String
   puzzleId: String
   conversationId: String!

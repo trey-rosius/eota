@@ -71,5 +71,24 @@ export class Data extends Construct {
       sortKey: { name: "GSI5SK", type: AttributeType.STRING },
       projectionType: ProjectionType.ALL,
     });
+
+    this.eotaTable.addGlobalSecondaryIndex({
+      indexName: "getRelics",
+      partitionKey: {
+        name: "GSI6PK",
+        type: AttributeType.STRING,
+      },
+      sortKey: { name: "GSI6SK", type: AttributeType.STRING },
+      projectionType: ProjectionType.INCLUDE,
+      nonKeyAttributes: [
+        "id",
+        "name",
+        "puzzleId",
+        "characterId",
+        "chapterId",
+        "description",
+        "imageUrl",
+      ],
+    });
   }
 }
