@@ -120,7 +120,8 @@ input CreatePuzzleInput {
   hint: String!
   chapterId: String!
 }
-type Puzzle {
+
+type Puzzle @aws_api_key {
   id: String!
   puzzleId: String!
   puzzleName: String!
@@ -146,7 +147,6 @@ type ConversationResponse @aws_api_key @aws_iam {
   hasOptions: Boolean
   firstConversation: Boolean
   puzzleId: String
-  puzzle: Puzzle
   message: String
   characterId: String
   chapterId: String
@@ -278,7 +278,6 @@ input ConversationResponseInput @aws_api_key {
   hasOptions: Boolean!
   imageUrl: String
   relicId: String
-  puzzle: String
   puzzleId: String
   message: String
   characterId: String!

@@ -73,7 +73,7 @@
         {
           "Variable": "$.nextStepType",
           "StringEquals": "PUZZLE",
-          "Next": "Pass (2)"
+          "Next": "Get Puzzle"
         },
         {
           "Variable": "$.nextStepType",
@@ -82,6 +82,64 @@
         }
       ],
       "Default": "Get Conversation"
+    },
+    "Get Puzzle": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::dynamodb:getItem",
+      "Parameters": {
+        "TableName": "eota",
+        "Key": {
+          "PK": {
+            "S.$": "States.Format('PUZZLE#{}',$.puzzleId)"
+          },
+          "SK": {
+            "S.$": "States.Format('PUZZLE#{}',$.puzzleId)"
+          }
+        }
+      },
+      "Next": "improve conversation based on Puzzle",
+      "ResultPath": "$.data"
+    },
+    "improve conversation based on Puzzle": {
+      "Type": "Pass",
+      "ResultPath": "$.option",
+      "Parameters": {
+        "id.$": "$.data.Item.id.S",
+        "conversationType.$": "$.nextStepType",
+        "puzzle": {
+          "chapterId.$": "$.data.Item.chapterId.S",
+          "decryptedMessage.$": "$.data.Item.decryptedMessage.S",
+          "encryptedMessage.$": "$.data.Item.encryptedMessage.S",
+          "hint.$": "$.data.Item.hint.S",
+          "id.$": "$.data.Item.id.S",
+          "puzzleDescription.$": "$.data.Item.puzzleDescription.S",
+          "puzzleId.$": "$.data.Item.puzzleId.S",
+          "puzzleName.$": "$.data.Item.puzzleName.S",
+          "puzzleType.$": "$.data.Item.puzzleType.S"
+        },
+        "hasOptions": false,
+        "firstConversation": false,
+        "chapterId.$": "$.data.Item.chapterId.S"
+      },
+      "Next": "Push to puzzle to frontend"
+    },
+    "Push to puzzle to frontend": {
+      "Type": "Task",
+      "ResultPath": "$.eventBridgeResult",
+      "Resource": "arn:aws:states:::events:putEvents",
+      "Parameters": {
+        "Entries": [
+          {
+            "Detail": {
+              "option.$": "$.option"
+            },
+            "DetailType": "option.responded",
+            "EventBusName": "arn:aws:events:us-east-2:132260253285:event-bus/EotaBackendStackEventBus2B124535",
+            "Source": "option.responding"
+          }
+        ]
+      },
+      "End": true
     },
     "create generative ai image": {
       "Type": "Pass",
@@ -214,10 +272,6 @@
           }
         ]
       },
-      "End": true
-    },
-    "Pass (2)": {
-      "Type": "Pass",
       "End": true
     },
     "Pass (1)": {
