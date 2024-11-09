@@ -103,6 +103,7 @@ type Player {
 input OptionInput {
   gameState: GAMESTATE!
   nextStepType: String!
+  puzzleId: String
   conversationId: String
   optionId: String
 }
