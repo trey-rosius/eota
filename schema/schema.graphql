@@ -1,5 +1,5 @@
 type Query {
-  getOption(id: ID): Boolean!
+  getOption(optionId: String!): Option!
   getCharacterConversations(
     limit: Int!
     nextToken: String
@@ -146,6 +146,7 @@ type ConversationResponse @aws_api_key @aws_iam {
   hasOptions: Boolean
   firstConversation: Boolean
   puzzleId: String
+  puzzle: Puzzle
   message: String
   characterId: String
   chapterId: String
@@ -155,6 +156,7 @@ type Conversation {
   id: String!
   message: String!
   conversationId: String!
+  conversationType: CONVERSATIONTYPE!
   chapterId: String!
   characterId: String!
   hasOptions: Boolean!
@@ -171,6 +173,7 @@ enum CONVERSATIONTYPE {
   CONVERSATION
   PUZZLE
   RELIC
+  RIDDLE
   GENERATIVE_IMAGE
 }
 
@@ -254,12 +257,14 @@ input CreateConversationInput {
   message: String!
   chapterId: String!
   characterId: String!
+  conversationType: CONVERSATIONTYPE!
   hasOptions: Boolean!
   firstConversation: Boolean!
 }
 input UpdateConversationInput {
   id: String!
   message: String!
+  conversationType: CONVERSATIONTYPE!
   firstConversation: Boolean!
   chapterId: String
   characterId: String
@@ -273,8 +278,9 @@ input ConversationResponseInput @aws_api_key {
   hasOptions: Boolean!
   imageUrl: String
   relicId: String
+  puzzle: String
   puzzleId: String
   message: String
-  characterId: String
-  chapterId: String
+  characterId: String!
+  chapterId: String!
 }
