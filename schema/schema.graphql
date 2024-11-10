@@ -35,7 +35,6 @@ type Mutation {
     @aws_api_key
   updateConversation(input: UpdateConversationInput!): Conversation!
     @aws_api_key
-
   createChapter(input: CreateChapterInput!): Chapter!
   createCharacter(input: CreateCharacterInput!): Character! @aws_api_key
   sendOption(input: OptionInput!): Boolean! @aws_api_key
@@ -157,7 +156,6 @@ type Conversation {
   id: String!
   message: String!
   conversationId: String!
-  conversationType: CONVERSATIONTYPE!
   chapterId: String!
   characterId: String!
   hasOptions: Boolean!
@@ -258,14 +256,12 @@ input CreateConversationInput {
   message: String!
   chapterId: String!
   characterId: String!
-  conversationType: CONVERSATIONTYPE!
   hasOptions: Boolean!
   firstConversation: Boolean!
 }
 input UpdateConversationInput {
   id: String!
   message: String!
-  conversationType: CONVERSATIONTYPE!
   firstConversation: Boolean!
   chapterId: String
   characterId: String

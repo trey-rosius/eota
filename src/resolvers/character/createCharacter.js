@@ -7,7 +7,7 @@ export const request = (ctx) => {
     PK: `CHARACTER#${id}`,
     SK: `CHARACTER#${id}`,
   };
-
+  //character
   const item = {
     id,
     ...ctx.args.input,
