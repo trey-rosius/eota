@@ -43,6 +43,8 @@ export class OptionHandler extends Construct {
             conversationId: EventField.fromPath("$.detail.conversationId"),
             gameState: EventField.fromPath("$.detail.gameState"),
             nextStepType: EventField.fromPath("$.detail.nextStepType"),
+            optionId: EventField.fromPath("$.detail.optionId"),
+            puzzleId: EventField.fromPath("$.detail.puzzleId"),
           }),
         }),
       ],
